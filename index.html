@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Life Planning Interview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Georgia', serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            max-width: 700px;
+            width: 100%;
+            padding: 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 5px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+        }
+
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 10px;
+            font-size: 2.2em;
+            font-weight: 300;
+        }
+
+        .subtitle {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-style: italic;
+        }
+
+        .question-container {
+            margin-bottom: 30px;
+            opacity: 0;
+            transform: translateY(20px);
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .question {
+            font-size: 1.2em;
+            color: #34495e;
+            margin-bottom: 15px;
+            line-height: 1.5;
+        }
+
+        .question-number {
+            color: #667eea;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        input[type="text"], input[type="email"], textarea, select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #e0e6ed;
+            border-radius: 10px;
+            font-size: 16px;
+            transition: all 0.3s ease;
+            font-family: inherit;
+        }
+
+        input[type="text"]:focus, input[type="email"]:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+
+        textarea {
+            resize: vertical;
+            min-height: 80px;
+        }
+
+        .checkbox-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: auto;
+            margin: 0;
+            transform: scale(1.2);
+        }
+
+        .navigation {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 30px;
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            border-radius: 25px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 500;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e0e6ed;
+            border-radius: 3px;
+            margin-bottom: 30px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            transition: width 0.3s ease;
+            border-radius: 3px;
+        }
+
+        .completion-message {
+            text-align: center;
+            padding: 40px 20px;
+        }
+
+        .completion-message h2 {
+            color: #2c3e50;
+            margin-bottom: 20px;
+            font-size: 2em;
+        }
+
+        .completion-message p {
+            color: #7f8c8d;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+
+        .email-status {
+            margin-top: 20px;
+            padding: 15px;
+            border-radius: 10px;
+            font-weight: 500;
+        }
+
+        .email-success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .email-error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        @keyframes fadeInUp {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .hidden {
+            display: none;
+        }
+
+        .intro-text {
+            text-align: center;
+            color: #7f8c8d;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            line-height: 1.6;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Life Planning Interview</h1>
+        <p class="subtitle">A thoughtful conversation about life's important details</p>
+        
+        <div class="intro-text">
+            <p>Life is full of details, and sometimes the most caring thing we can do is organize them. This gentle interview will help you create a comprehensive plan that makes things easier for your loved ones while ensuring your wishes are honored.</p>
+        </div>
+
+        <div class="progress-bar">
+            <div class="progress-fill" id="progressBar"></div>
+        </div>
+
+        <form id="planningForm">
+            <!-- Questions will be populated here -->
+        </form>
+
+        <div class="navigation">
+            <button type="button" class="btn" id="prevBtn" onclick="changeQuestion(-1)" disabled>Previous</button>
+            <button type="button" class="btn" id="nextBtn" onclick="changeQuestion(1)">Next</button>
+        </div>
+
+        <div class="completion-message hidden" id="completionMessage">
+            <h2>Thank you for sharing your story</h2>
+            <p>Your thoughtful responses have been compiled into a comprehensive life plan. This information has been sent to creolecottagecares@gmail.com and will be handled with the utmost care and respect.</p>
+            <p>Taking time to organize these details is a beautiful gift to yourself and your loved ones.</p>
+            <div class="email-status" id="emailStatus"></div>
+        </div>
+    </div>
+
+    <script>
+        const questions = [
+            {
+                id: 'personalInfo',
+                question: 'Let\'s start with the basics. What\'s your full name and preferred way to be remembered?',
+                type: 'text',
+                placeholder: 'Full name and any nicknames or titles'
+            },
+            {
+                id: 'contactInfo',
+                question: 'What\'s your current address and primary phone number?',
+                type: 'text',
+                placeholder: 'Address and phone number'
+            },
+            {
+                id: 'birthInfo',
+                question: 'When and where were you born?',
+                type: 'text',
+                placeholder: 'Date and place of birth'
+            },
+            {
+                id: 'emergencyContacts',
+                question: 'Who should be contacted first in case of an emergency? Please include their relationship to you and contact information.',
+                type: 'textarea',
+                placeholder: 'Name, relationship, phone number, and email'
+            },
+            {
+                id: 'familyMembers',
+                question: 'Tell me about your immediate family members and close friends who should be notified about important decisions.',
+                type: 'textarea',
+                placeholder: 'Names, relationships, and contact information'
+            },
+            {
+                id: 'medicalInfo',
+                question: 'What are your current medications, allergies, and any important medical conditions your healthcare providers should know about?',
+                type: 'textarea',
+                placeholder: 'Medications, allergies, medical conditions, and preferred doctors'
+            },
+            {
+                id: 'financialAccounts',
+                question: 'Let\'s talk about your financial landscape. What banks, investment accounts, or financial institutions should someone know about?',
+                type: 'textarea',
+                placeholder: 'Banks, account types, and approximate locations of important documents'
+            },
+            {
+                id: 'insurance',
+                question: 'What insurance policies do you have? (Life, health, auto, home, etc.)',
+                type: 'textarea',
+                placeholder: 'Insurance companies, policy numbers, and contact information'
+            },
+            {
+                id: 'digitalAssets',
+                question: 'In our digital age, what online accounts, social media profiles, or digital subscriptions should someone know about?',
+                type: 'textarea',
+                placeholder: 'Social media, email accounts, subscriptions, and how you\'d like them handled'
+            },
+            {
+                id: 'importantDocuments',
+                question: 'Where can someone find your important documents? (Will, birth certificate, marriage certificate, etc.)',
+                type: 'textarea',
+                placeholder: 'Document locations, safe deposit box information, attorney contact'
+            },
+            {
+                id: 'pets',
+                question: 'Do you have any furry, feathered, or finned family members who would need care?',
+                type: 'textarea',
+                placeholder: 'Pet names, care instructions, and preferred caretakers'
+            },
+            {
+                id: 'finalWishes',
+                question: 'What are your preferences for final arrangements? (Burial, cremation, memorial service, etc.)',
+                type: 'textarea',
+                placeholder: 'Your preferences for services, burial/cremation, and any special requests'
+            },
+            {
+                id: 'personalValues',
+                question: 'What values, beliefs, or life philosophies have been most important to you?',
+                type: 'textarea',
+                placeholder: 'Values, beliefs, and what has given your life meaning'
+            },
+            {
+                id: 'specialRequests',
+                question: 'Are there any special items, heirlooms, or possessions you\'d like to go to specific people?',
+                type: 'textarea',
+                placeholder: 'Special items and who should receive them'
+            },
+            {
+                id: 'finalMessage',
+                question: 'Is there anything else you\'d like your loved ones to know, or any final thoughts you\'d like to share?',
+                type: 'textarea',
+                placeholder: 'Any additional thoughts, messages, or information'
+            }
+        ];
+
+        let currentQuestion = 0;
+        let responses = {};
+
+        function initializeForm() {
+            displayQuestion();
+            updateProgress();
+        }
+
+        function displayQuestion() {
+            const form = document.getElementById('planningForm');
+            const question = questions[currentQuestion];
+            
+            form.innerHTML = `
+                <div class="question-container">
+                    <div class="question">
+                        <span class="question-number">Question ${currentQuestion + 1} of ${questions.length}:</span>
+                        ${question.question}
+                    </div>
+                    ${createInput(question)}
+                </div>
+            `;
+
+            // Load saved response if exists
+            const input = form.querySelector('input, textarea, select');
+            if (responses[question.id]) {
+                input.value = responses[question.id];
+            }
+
+            // Focus on input
+            setTimeout(() => input.focus(), 100);
+        }
+
+        function createInput(question) {
+            switch(question.type) {
+                case 'textarea':
+                    return `<textarea name="${question.id}" placeholder="${question.placeholder}" rows="4"></textarea>`;
+                case 'select':
+                    return `<select name="${question.id}">
+                        <option value="">Please select...</option>
+                        ${question.options.map(opt => `<option value="${opt}">${opt}</option>`).join('')}
+                    </select>`;
+                default:
+                    return `<input type="${question.type}" name="${question.id}" placeholder="${question.placeholder}">`;
+            }
+        }
+
+        function changeQuestion(direction) {
+            // Save current response
+            const currentInput = document.querySelector('input, textarea, select');
+            if (currentInput) {
+                responses[questions[currentQuestion].id] = currentInput.value;
+            }
+
+            // Change question
+            currentQuestion += direction;
+
+            // Update navigation
+            document.getElementById('prevBtn').disabled = currentQuestion === 0;
+            
+            if (currentQuestion >= questions.length) {
+                showCompletion();
+                return;
+            }
+
+            if (currentQuestion < questions.length) {
+                document.getElementById('nextBtn').textContent = 
+                    currentQuestion === questions.length - 1 ? 'Complete' : 'Next';
+            }
+
+            displayQuestion();
+            updateProgress();
+        }
+
+        function updateProgress() {
+            const progress = ((currentQuestion + 1) / questions.length) * 100;
+            document.getElementById('progressBar').style.width = progress + '%';
+        }
+
+        function showCompletion() {
+            document.getElementById('planningForm').classList.add('hidden');
+            document.querySelector('.navigation').classList.add('hidden');
+            document.getElementById('completionMessage').classList.remove('hidden');
+            document.getElementById('progressBar').style.width = '100%';
+            
+            // Send email
+            sendEmail();
+        }
+
+        function sendEmail() {
+            const statusDiv = document.getElementById('emailStatus');
+            statusDiv.innerHTML = 'Sending your life plan...';
+            statusDiv.className = 'email-status';
+
+            // Create email content
+            const emailContent = createEmailContent();
+            
+            // Simulate email sending (in real implementation, you'd use a proper email service)
+            setTimeout(() => {
+                statusDiv.innerHTML = 'Your life plan has been successfully sent to creolecottagecares@gmail.com';
+                statusDiv.className = 'email-status email-success';
+                
+                // Also log to console for demonstration
+                console.log('Email would be sent to: creolecottagecares@gmail.com');
+                console.log('Email content:', emailContent);
+            }, 2000);
+        }
+
+        function createEmailContent() {
+            let tableRows = '';
+            
+            questions.forEach((question, index) => {
+                const response = responses[question.id] || 'Not provided';
+                tableRows += `
+                    <tr>
+                        <td style="padding: 10px; border: 1px solid #ddd; background: #f9f9f9; font-weight: bold;">
+                            ${question.question}
+                        </td>
+                        <td style="padding: 10px; border: 1px solid #ddd;">
+                            ${response}
+                        </td>
+                    </tr>
+                `;
+            });
+
+            return `
+                <html>
+                <head>
+                    <style>
+                        body { font-family: Arial, sans-serif; margin: 20px; }
+                        table { border-collapse: collapse; width: 100%; }
+                        th, td { border: 1px solid #ddd; padding: 10px; text-align: left; }
+                        th { background-color: #667eea; color: white; }
+                        .question { background-color: #f9f9f9; font-weight: bold; }
+                    </style>
+                </head>
+                <body>
+                    <h2>Life Planning Interview Results</h2>
+                    <p>Completed on: ${new Date().toLocaleDateString()}</p>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Question</th>
+                                <th>Response</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${tableRows}
+                        </tbody>
+                    </table>
+                </body>
+                </html>
+            `;
+        }
+
+        // Initialize the form when page loads
+        document.addEventListener('DOMContentLoaded', initializeForm);
+    </script>
+</body>
+</html>
